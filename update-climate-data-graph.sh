@@ -17,3 +17,9 @@ if grep "$CONTAINER_NAME" <<< $LIST_CONTAINERS; then
 fi
 
 docker run --name $CONTAINER_NAME -d -p 8080:80 $IMAGE_NAME
+
+TEMP_CRONJOB_FILE=cronjob
+
+echo "* * * * * /root/climate-data-graph-scheduler/update-climate-data-graph.sh >/dev/null 2>&1" >> $TEMP_CRONJOB_FILE
+crontab $TEMP_CRONJOB_FILE
+rm $TEMP_CRONJOB_FILE
