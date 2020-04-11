@@ -17,14 +17,3 @@ if grep "$CONTAINER_NAME" <<< $LIST_CONTAINERS; then
 fi
 
 docker run --name $CONTAINER_NAME -d -p 8080:80 $IMAGE_NAME
-
-PROJECT_NAME=climate-data-graph-scheduler
-TEMP_CRONJOB_FILE=cronjob
-LIST_CRONJOBS=$(crontab -l)
-
-if ! grep "$PROJECT_NAME" <<< $LIST_CRONJOBS; then
-    echo "PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin" > $TEMP_CRONJOB_FILE
-    echo "30 21 * * * cd ${PROJECT_NAME} && ./update-climate-data-graph.sh >/dev/null 2>&1" >> $TEMP_CRONJOB_FILE
-    crontab $TEMP_CRONJOB_FILE
-    rm $TEMP_CRONJOB_FILE
-fi
